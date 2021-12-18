@@ -8,4 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "RTC Client"
 include ':app'
-include ':p2pclient'
+include ':websocket'
