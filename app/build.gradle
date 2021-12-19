@@ -46,6 +46,8 @@ dependencies {
     implementation 'org.java-websocket:Java-WebSocket:1.5.2'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.alibaba:fastjson:1.1.64.android'
+    implementation 'io.github.crow-misia.sdp:sdp:1.0.0'
+    implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.8'
     // Test libraries
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

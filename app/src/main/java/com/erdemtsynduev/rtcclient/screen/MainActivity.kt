@@ -12,22 +12,24 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import com.erdemtsynduev.rtcclient.*
+import com.erdemtsynduev.rtcclient.quality.CaptureQualityController
+import com.erdemtsynduev.rtcclient.quality.OnCallEvents
 import com.erdemtsynduev.rtcclient.rtc.AppSdpObserver
 import com.erdemtsynduev.rtcclient.rtc.PeerConnectionObserver
 import com.erdemtsynduev.rtcclient.rtc.RTCClient
 import com.erdemtsynduev.rtcclient.signalling.SignallingClient
 import com.erdemtsynduev.rtcclient.signalling.SignallingClientListener
-import kotlinx.android.synthetic.main.activity_main.call_button
-import kotlinx.android.synthetic.main.activity_main.local_view
-import kotlinx.android.synthetic.main.activity_main.remote_view
-import kotlinx.android.synthetic.main.activity_main.remote_view_loading
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.webrtc.IceCandidate
 import org.webrtc.MediaStream
 import org.webrtc.SessionDescription
 
 @ExperimentalCoroutinesApi
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnCallEvents {
 
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         checkCameraPermission()
+        addReactNetworkConnectivity()
     }
 
     private fun checkCameraPermission() {
@@ -83,6 +86,10 @@ class MainActivity : AppCompatActivity() {
         rtcClient.startLocalVideoCapture(local_view)
         signallingClient = SignallingClient(createSignallingClientListener())
         call_button.setOnClickListener { rtcClient.call(sdpObserver) }
+
+        capture_format_slider_call.setOnSeekBarChangeListener(
+            CaptureQualityController(capture_format_text_call, this)
+        )
     }
 
     private fun createSignallingClientListener() = object : SignallingClientListener {
@@ -162,5 +169,18 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         signallingClient.destroy()
         super.onDestroy()
+    }
+
+    fun addReactNetworkConnectivity() {
+        ReactiveNetwork
+            .observeNetworkConnectivity(this)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{
+            }
+    }
+
+    override fun onCaptureFormatChange(width: Int, height: Int, framerate: Int) {
+        rtcClient?.changeCaptureFormat(width, height, framerate)
     }
 }
