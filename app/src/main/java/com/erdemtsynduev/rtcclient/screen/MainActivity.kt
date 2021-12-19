@@ -12,7 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import com.erdemtsynduev.rtcclient.*
-import com.erdemtsynduev.rtcclient.quality.CaptureQualityController
+import com.erdemtsynduev.rtcclient.quality.QualityController
 import com.erdemtsynduev.rtcclient.quality.OnCallEvents
 import com.erdemtsynduev.rtcclient.rtc.AppSdpObserver
 import com.erdemtsynduev.rtcclient.rtc.PeerConnectionObserver
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), OnCallEvents {
         call_button.setOnClickListener { rtcClient.call(sdpObserver) }
 
         capture_format_slider_call.setOnSeekBarChangeListener(
-            CaptureQualityController(capture_format_text_call, this)
+            QualityController(capture_format_text_call, this)
         )
     }
 

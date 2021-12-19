@@ -9,7 +9,7 @@ import java.util.*
 import kotlin.math.exp
 import kotlin.math.roundToInt
 
-class CaptureQualityController(
+class QualityController(
     private val captureFormatText: TextView,
     private val callEvents: OnCallEvents?,
 ) : OnSeekBarChangeListener {
