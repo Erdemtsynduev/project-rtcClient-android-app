@@ -90,10 +90,11 @@ class RTCClient(
         observer
     )
 
+    // TODO Для эмулятора нужно использовать isBackFacing
     private fun getVideoCapturer(context: Context) =
         Camera2Enumerator(context).run {
             deviceNames.find {
-                isBackFacing(it)
+                isFrontFacing(it)
             }?.let {
                 createCapturer(it, null)
             } ?: throw IllegalStateException()
